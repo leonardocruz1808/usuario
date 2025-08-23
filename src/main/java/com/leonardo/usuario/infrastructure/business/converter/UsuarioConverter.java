@@ -93,4 +93,17 @@ public class UsuarioConverter {
                 .ddd(telefoneDTO.getDdd())
                 .build();
     }
+
+    public Usuario updateUsuario(UsuarioDTO usuario, Usuario entity){
+        return Usuario.builder()
+                //No update, foi passado o nome? Se sim, grava a atualização, se não, busca no banco o nome, segue a logica
+                //para todos os métodos
+                .nome(usuario.getNome() != null ? usuario.getNome() : entity.getNome())
+                .senha(usuario.getSenha() != null ? usuario.getSenha() : entity.getSenha())
+                .email(usuario.getEmail() != null ? usuario.getEmail() : entity.getEmail())
+                .enderecos(entity.getEnderecos())
+                .telefones(entity.getTelefones())
+                .id(entity.getId())
+                .build();
+    }
 }
