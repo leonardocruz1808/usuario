@@ -1,11 +1,15 @@
 package com.leonardo.usuario.infrastructure.controller;
 
 
+import com.leonardo.usuario.infrastructure.business.DTO.EnderecoDTO;
+import com.leonardo.usuario.infrastructure.business.DTO.TelefoneDTO;
 import com.leonardo.usuario.infrastructure.business.DTO.UsuarioDTO;
 import com.leonardo.usuario.infrastructure.business.UsuarioService;
 import com.leonardo.usuario.infrastructure.entity.Usuario;
+import com.leonardo.usuario.infrastructure.repository.TelefoneRepository;
 import com.leonardo.usuario.infrastructure.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,7 +39,7 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public ResponseEntity <Usuario> buscarUsuarioPorEmail(@RequestParam("email") String email){
+    public ResponseEntity <UsuarioDTO> buscarUsuarioPorEmail(@RequestParam("email") String email){
         return ResponseEntity.ok(usuarioService.buscarUsuarioPorEmail(email));
     }
 
@@ -44,5 +48,23 @@ public class UsuarioController {
         usuarioService.deleteByEmail(email);
         return ResponseEntity.ok().build();
         //como esse metodo não tem retorno, o responseEntity.build gera um retorno caso tiver algum erro
+    }
+
+    @PutMapping
+    public ResponseEntity<UsuarioDTO> atualizarDadosUsuario (@RequestBody UsuarioDTO dto, @RequestHeader("Authorization")
+                                                             String token){
+        return ResponseEntity.ok(usuarioService.atualizaDadosUsuario(token, dto));
+    }
+
+    @PutMapping("/endereco")
+    public ResponseEntity<EnderecoDTO> atualizarEndereco (@RequestBody EnderecoDTO dto, @RequestParam("id") Long id){
+
+        return ResponseEntity.ok(usuarioService.atualizaEndereco(id, dto));
+    }
+
+    @PutMapping("/telefone")
+    public ResponseEntity<TelefoneDTO> atualizaTelefone (@RequestBody TelefoneDTO dto, @RequestParam("id") Long id){
+
+        return ResponseEntity.ok(usuarioService.atualizaTelefone(id, dto));
     }
 }
